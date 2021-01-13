@@ -10,12 +10,14 @@ $ - create basic structure
         future conditions
 when user enters a city and clicks on search
     city is stored into recents array
+        array is pulled from local storage
+        if city is not found in array it is stored as the latest city
+        if the city is found in the array it is not stored
+        array is returned to local storage
     city is set to current city
-    weather is dislayed for current city
+        city is sent to api and data is dipslayed
 when user click on a recent city
-    city is set to current city
-    weather is displayed for curent city
-
+    city is sent to API and date is displayed
 */
 
 // STRUCTURE LAYOUT
@@ -71,39 +73,58 @@ when user click on a recent city
     );
 
 var APIKey = "40a8eac704499a683458b2a328507962"
-// var recentCities = localStorage.getItem (JSON.parse("weatherRecentCiteiesArr"));
-// if (recentCities = null) {
-    
+
+function pullRecentCities() {
+    return JSON.parse(localStorage.getItem("weatherRecentCitiesArr"));
+    console.log("recent cities in pull function = " +JSON.parse(localStorage.getItem("weatherRecentCitiesArr")));
+
+}
+
+function pushRecentCities (arr) {
+    localStorage.setItem ("weatherRecentCitiesArr", JSON.stringify(arr));
+}
+
+
+// var recentCitiesArr = pullRecentCities();
+// console.log(pullRecentCities());
+// console.log(recentCitiesArr);
+// if (recentCitiesArr = '') {
+//     alert ("no recent cities");
+//     console.log (recentCitiesArr)
 // }
 
-// var test = localStorage.getItem ("doesNotExist");
-// console.log(test);
+
+function addCityToRecentCitites (userInputCity) {
+    var recentCitiesArr = pullRecentCities();
+    console.log("cities array in addToRecentCitiesFunction = " +recentCitiesArr);
+    if (recentCitiesArr == null) {
+        var recentCitiesArr = [];
+    }
+    if (recentCitiesArr.includes(userInputCity) == false) {
+        if (recentCitiesArr.length < 8) {
+            recentCitiesArr.unshift(userInputCity);
+        } else {
+            recentCitiesArr.splice(recentCities.length-1,1,userInputCity)
+        }
+    }
+    pushRecentCities (recentCitiesArr);
+    console.log(recentCitiesArr);
+}
 
 
-// function addCityToRecentCitites (userInputCity) {
-//     if (!recentCities.includes(userInputCity)) {
-//         if (recentCities < 8) {
-//             recentCities.shift(userInputCity);
-//         } else {
-//             recentCities.splice(recentCities.length-1,1,userInputCity)
-//         }
-//     }
-//     localStorage.setItem ("weatherRecentCiteiesArr", JSON.stringify(recentCities));
-// }
 
 // on click search - calls getCityInfo() which calls addCityToCurrentCities()
 $("#searchBtn").on("click", getCityInfo);
 
 function getCityInfo () {
     var userInput = $("#searchBar").val();
-    // var userInput = "Raleigh,NC"
     var address = `http://api.openweathermap.org/data/2.5/forecast?q=${userInput}&appid=40a8eac704499a683458b2a328507962`;
     var callParameters = "";
-    // $("#searchBar").val("");
+    $("#searchBar").val("");
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=Minneapolis,MN&appid=" + APIKey;
- 
-    // addCityToRecentCitites (userInput)
-    // console.log(recentCities);
+    console.log(userInput);
+    addCityToRecentCitites(userInput);
+    
 
 // if ()
 
