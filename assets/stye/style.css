@@ -1,3 +1,16 @@
 body {
     background-color: steelblue;
 }
+
+aside {
+    border: 2px solid green;
+    float: left;
+    width: 300px;
+}
+div {
+    border: 2px solid black;
+}
+main {
+    border: 2px solid red;
+    width: 100%;
+}
