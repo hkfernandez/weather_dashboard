@@ -50,7 +50,7 @@ when user click on a recent city
                  .text("search")
      )
  
-    $("#citySectionPane").append(
+    $("#citySelectionPane").append(
         $("<div>")
             .attr ("id", "recentCitiesPane")
             .text ("recent cities")
@@ -85,18 +85,9 @@ function pushRecentCities (arr) {
 }
 
 
-// var recentCitiesArr = pullRecentCities();
-// console.log(pullRecentCities());
-// console.log(recentCitiesArr);
-// if (recentCitiesArr = '') {
-//     alert ("no recent cities");
-//     console.log (recentCitiesArr)
-// }
-
-
 function addCityToRecentCitites (userInputCity) {
     var recentCitiesArr = pullRecentCities();
-    console.log("cities array in addToRecentCitiesFunction = " +recentCitiesArr);
+    // console.log("cities array in addToRecentCitiesFunction = " +recentCitiesArr);
     if (recentCitiesArr == null) {
         var recentCitiesArr = [];
     }
@@ -108,8 +99,21 @@ function addCityToRecentCitites (userInputCity) {
         }
     }
     pushRecentCities (recentCitiesArr);
-    console.log(recentCitiesArr);
+    appendRecentCities ();
 }
+
+function appendRecentCities () {
+    var recentCitiesArr = pullRecentCities();
+    for (let index = 0; index < recentCitiesArr.length; index++) {
+        const city = $("<button>")
+        $(city).val(recentCitiesArr[index]);
+        $(city).text(recentCitiesArr[index]);
+        $(city).attr("class", "recentBtn");
+        $("#recentCitiesPane").append(city);
+    }
+}
+
+appendRecentCities ();
 
 
 
@@ -122,28 +126,15 @@ function getCityInfo () {
     var callParameters = "";
     $("#searchBar").val("");
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=Minneapolis,MN&appid=" + APIKey;
-    console.log(userInput);
+    // console.log(userInput);
     addCityToRecentCitites(userInput);
     
-
-// if ()
-
-
     $.ajax({
         url: address,
         method: "GET"
       }).then(function(response) {
         console.log(response);
       });
-
-
 }
 
-//     $.ajax({
-//         type: "GET",
-//         url: address,
-//         success: function (response) {
-//             console.log (response);
-//         }
-//     });   
-// };
+
