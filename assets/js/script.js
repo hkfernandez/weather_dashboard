@@ -71,35 +71,39 @@ when user click on a recent city
     );
 
 var APIKey = "40a8eac704499a683458b2a328507962"
-var recentCities =[""]
+// var recentCities = localStorage.getItem (JSON.parse("weatherRecentCiteiesArr"));
+// if (recentCities = null) {
+    
+// }
 
-function pullRecentCitiesLocalStorage (){
-    recentCities = localStorage.getItem (JSON.parse("weatherRecentCiteiesArr"));
-}
+// var test = localStorage.getItem ("doesNotExist");
+// console.log(test);
 
-function addCityToRecentCitites (userInputCity) {
-    if (!recentCities.includes(userInputCity)) {
-        if (recentCities < 8) {
-            recentCities.unshift(userInputCity);
-        } else {
-            recentCities.splice(0,1,userInputCity)
-        }
-    }
-}
+
+// function addCityToRecentCitites (userInputCity) {
+//     if (!recentCities.includes(userInputCity)) {
+//         if (recentCities < 8) {
+//             recentCities.shift(userInputCity);
+//         } else {
+//             recentCities.splice(recentCities.length-1,1,userInputCity)
+//         }
+//     }
+//     localStorage.setItem ("weatherRecentCiteiesArr", JSON.stringify(recentCities));
+// }
 
 // on click search - calls getCityInfo() which calls addCityToCurrentCities()
-$("#searchButtn").on("click", getCityInfo);
+$("#searchBtn").on("click", getCityInfo);
 
 function getCityInfo () {
-    // var userInput = $("#searchBar").val();
-    var userInput = "Raleigh,NC"
-    var address = 'api.openweathermap.org/data/2.5/forecast?q=Minneapolis&appid=40a8eac704499a683458b2a328507962';
+    var userInput = $("#searchBar").val();
+    // var userInput = "Raleigh,NC"
+    var address = `http://api.openweathermap.org/data/2.5/forecast?q=${userInput}&appid=40a8eac704499a683458b2a328507962`;
     var callParameters = "";
     // $("#searchBar").val("");
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=Minneapolis,MN&appid=" + APIKey;
  
-addCityToRecentCitites (userInput)
-console.log(recentCities);
+    // addCityToRecentCitites (userInput)
+    // console.log(recentCities);
 
 // if ()
 
@@ -122,6 +126,3 @@ console.log(recentCities);
 //         }
 //     });   
 // };
-
-
-getCityInfo ();
