@@ -215,11 +215,11 @@ function postFutureConditions (weatherObj){
         $(`#future${index}`).append(iconDiv);
 
         var tempDiv = $("<div>");
-        $(tempDiv).text(`Temp : ${weatherObj.list[index].main.temp} F`);
+        $(tempDiv).text(`Temp : ${Math.floor((weatherObj.list[index].main.temp-273.15)*9/5+32)} F`);
         $(`#future${index}`).append(tempDiv);
 
         var humidityDiv = $("<div>");
-        $(humidityDiv).text(`Humidity : ${weatherObj.list[index].main.temp}%`);
+        $(humidityDiv).text(`Humidity : ${weatherObj.list[index].main.humidity}%`);
         $(`#future${index}`).append(humidityDiv);
     
         
