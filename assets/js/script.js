@@ -103,6 +103,7 @@ function addCityToRecentCitites (userInputCity) {
 }
 
 function appendRecentCities () {
+    $("#recentCitiesPane").empty();
     var recentCitiesArr = pullRecentCities();
     for (let index = 0; index < recentCitiesArr.length; index++) {
         const city = $("<button>")
@@ -122,19 +123,35 @@ $("#searchBtn").on("click", getCityInfo);
 
 function getCityInfo () {
     var userInput = $("#searchBar").val();
-    var address = `http://api.openweathermap.org/data/2.5/forecast?q=${userInput}&appid=40a8eac704499a683458b2a328507962`;
-    var callParameters = "";
+    var addressFutureConditions = `http://api.openweathermap.org/data/2.5/forecast?q=${userInput}&appid=40a8eac704499a683458b2a328507962`;
+    var addressCurrentConditions = `http://api.openweathermap.org/data/2.5/weather?q=${userInput}&appid=40a8eac704499a683458b2a328507962`
+    var addressOneCallWeather = 
+    // var callParameters = "";
     $("#searchBar").val("");
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=Minneapolis,MN&appid=" + APIKey;
     // console.log(userInput);
     addCityToRecentCitites(userInput);
     
     $.ajax({
-        url: address,
+        url: addressFutureConditions,
         method: "GET"
-      }).then(function(response) {
-        console.log(response);
+      }).then(function(futureConditions) {
+        console.log(futureConditions);
+        // postFutureConditions(furtureConditions);
       });
+
+      $.ajax({
+        url: addressCurrentConditions,
+        method: "GET"
+      }).then(function(currentConditions) {
+        console.log(currentConditions);
+        postCurrentConditions(currentConditions);
+      });
+    
 }
 
-
+function postCurrentConditions (weatherObj) {
+    var cityName = $("<div>");
+    $(cityName).text(weatherObj.name);
+    $("#currentConditionsPane").append(cityName);
+}

@@ -15,3 +15,6 @@ main {
     border: 2px solid red;
     width: 100%;
 }
+button {
+    display: block;
+}
