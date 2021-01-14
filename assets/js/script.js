@@ -126,7 +126,7 @@ function getCityInfo () {
     var userInput = $("#searchBar").val();
     var addressFutureConditions = `http://api.openweathermap.org/data/2.5/forecast?q=${userInput}&appid=40a8eac704499a683458b2a328507962`;
     var addressCurrentConditions = `http://api.openweathermap.org/data/2.5/weather?q=${userInput}&appid=40a8eac704499a683458b2a328507962`
-    var addressOneCallWeather = 
+    // var addressOneCallWeather = 
     // var callParameters = "";
     $("#searchBar").val("");
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=Minneapolis,MN&appid=" + APIKey;
@@ -187,12 +187,25 @@ function postFutureConditions (weatherObj){
         var cardDiv = $("<div>");
         $(cardDiv).attr("id", `future${index}`);
         $(cardDiv).attr("class","futureCard");
-        $(cardDiv).text("test");
+        $(cardDiv).text("card");
         $("#futureConditionsPane").append(cardDiv);
+
+        var dateDiv = $("<div>");
+        $(dateDiv).text(currentDate);
+        $(`#future${index}`).append(dateDiv);
+
+        var iconDiv = $("<div>");
+        $(iconDiv).text(weatherObj.list[index].weather[0].icon);
+        $(`#future${index}`).append(iconDiv);
+
+        var tempDiv = $("<div>");
+        $(tempDiv).text(`Temp : ${weatherObj.list[index].main.temp} F`);
+        $(`#future${index}`).append(tempDiv);
+
+        var humidityDiv = $("<div>");
+        $(humidityDiv).text(`Humidity : ${weatherObj.list[index].main.temp}%`);
+        $(`#future${index}`).append(humidityDiv);
     
-        // var iconDiv = $("<div>");
-        // $(iconDiv).text(weatherObj.list.index.weather[0].icon);
-        // $(`#future${index}`).append(iconDiv);
         
     }
 

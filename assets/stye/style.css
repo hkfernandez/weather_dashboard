@@ -19,5 +19,7 @@ button {
     display: block;
 }
 .futureCard {
+    display: inline;
     background-color: white;
+    color: black;
 }
