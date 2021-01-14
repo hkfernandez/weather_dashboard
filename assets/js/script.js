@@ -162,6 +162,9 @@ function postCurrentConditions (weatherObj) {
     $(date).text(currentDate);
     $("#currentConditionsPane").append(date);
 
+    // var icon = $("<span>");
+    // $(icon).text(weatherObj.weather[0].icon);
+    // $("#currentConditionsPane").append(icon);
 
 
 }
