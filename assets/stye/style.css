@@ -18,6 +18,13 @@ main {
 button {
     display: block;
 }
+
+#futureConditionsPane {
+    display: flex;
+    flex-direction: row;
+}
+)
+
 .futureCard {
     display: inline;
     background-color: white;

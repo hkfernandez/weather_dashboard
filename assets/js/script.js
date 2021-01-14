@@ -120,19 +120,42 @@ appendRecentCities ();
 
 
 // on click search - calls getCityInfo() which calls addCityToCurrentCities()
+// oneCall ajax call inside first call as it needs variables from the first call
 $("#searchBtn").on("click", getCityInfo);
 
 function getCityInfo () {
     var userInput = $("#searchBar").val();
     var addressFutureConditions = `http://api.openweathermap.org/data/2.5/forecast?q=${userInput}&appid=40a8eac704499a683458b2a328507962`;
     var addressCurrentConditions = `http://api.openweathermap.org/data/2.5/weather?q=${userInput}&appid=40a8eac704499a683458b2a328507962`
-    // var addressOneCallWeather = 
-    // var callParameters = "";
+
     $("#searchBar").val("");
-    var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=Minneapolis,MN&appid=" + APIKey;
-    // console.log(userInput);
+
     addCityToRecentCitites(userInput);
-    
+
+      $.ajax({
+        url: addressCurrentConditions,
+        method: "GET"
+      }).then(function(currentConditions) {
+        console.log(currentConditions);
+        postCurrentConditions(currentConditions);
+        UVcall(currentConditions);
+
+        function UVcall (weatherObj) {
+        var lat = weatherObj.coord.lat
+        var lon = weatherObj.coord.lon
+        var addressOneCallWeather = `http://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude={part}&appid=40a8eac704499a683458b2a328507962`
+        console.log("coordinates = " + lon + lat);
+        
+         $.ajax({
+            url: addressOneCallWeather,
+            method: "GET"
+          }).then(function(oneCallConditions) {
+            console.log(oneCallConditions);
+            // postUV(oneCallConditions);
+          });
+        }  
+      });
+
     $.ajax({
         url: addressFutureConditions,
         method: "GET"
@@ -141,13 +164,7 @@ function getCityInfo () {
         postFutureConditions(futureConditions);
       });
 
-      $.ajax({
-        url: addressCurrentConditions,
-        method: "GET"
-      }).then(function(currentConditions) {
-        console.log(currentConditions);
-        postCurrentConditions(currentConditions);
-      });
+      
     
 }
 
@@ -187,7 +204,6 @@ function postFutureConditions (weatherObj){
         var cardDiv = $("<div>");
         $(cardDiv).attr("id", `future${index}`);
         $(cardDiv).attr("class","futureCard");
-        $(cardDiv).text("card");
         $("#futureConditionsPane").append(cardDiv);
 
         var dateDiv = $("<div>");
