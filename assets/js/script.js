@@ -72,8 +72,7 @@ when user click on a recent city
             .text ("future conditions pane")
     );
 
-var APIKey = "40a8eac704499a683458b2a328507962"
-var currentDate = dayjs ().format('HH');;
+var APIKey = "40a8eac704499a683458b2a328507962";
 
 function pullRecentCities() {
     return JSON.parse(localStorage.getItem("weatherRecentCitiesArr"));
@@ -137,22 +136,22 @@ function getCityInfo () {
         method: "GET"
       }).then(function(currentConditions) {
         console.log(currentConditions);
-        postCurrentConditions(currentConditions);
         UVcall(currentConditions);
-
-        function UVcall (weatherObj) {
-        var lat = weatherObj.coord.lat
-        var lon = weatherObj.coord.lon
-        var addressOneCallWeather = `http://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude={part}&appid=40a8eac704499a683458b2a328507962`
-        console.log("coordinates = " + lon + lat);
         
-         $.ajax({
-            url: addressOneCallWeather,
-            method: "GET"
-          }).then(function(oneCallConditions) {
-            console.log(oneCallConditions);
-            // postUV(oneCallConditions);
-          });
+        function UVcall (weatherObj) {
+            var lat = weatherObj.coord.lat
+            var lon = weatherObj.coord.lon
+            var addressOneCallWeather = `http://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude={part}&appid=40a8eac704499a683458b2a328507962`
+            console.log("coordinates = " + lon + lat);
+            
+            $.ajax({
+                url: addressOneCallWeather,
+                method: "GET"
+            }).then(function(oneCallConditions) {
+                console.log(oneCallConditions);
+                // postUV(oneCallConditions);
+                postCurrentConditions(currentConditions, oneCallConditions);
+            });
         }  
       });
 
@@ -168,8 +167,9 @@ function getCityInfo () {
     
 }
 
-function postCurrentConditions (weatherObj) {
+function postCurrentConditions (weatherObj, uvObj) {
     $("#currentConditionsPane").empty();
+    var currentDate = dayjs ().format('dddd MMM DD');
 
     var cityName = $("<span>");
     $(cityName).text(weatherObj.name);
@@ -179,12 +179,16 @@ function postCurrentConditions (weatherObj) {
     $(date).text(currentDate);
     $("#currentConditionsPane").append(date);
 
-    var icon = $("<span>");
-    $(icon).text(weatherObj.weather[0].icon);
+    var icon = $("<img>");
+    $(icon).attr("src", `http://openweathermap.org/img/w/${weatherObj.weather[0].icon}.png`);
     $("#currentConditionsPane").append(icon);
 
+    var tempDiv = $("<div>");
+    $(tempDiv).text(`Temp : ${Math.floor((weatherObj.main.temp-273.15)*9/5+32)} F`);
+    $("#currentConditionsPane").append(tempDiv);
+
     var humidity = $("<div>");
-    $(humidity).text("Humidity : " +weatherObj.main.humidity);
+    $(humidity).text(`Humidity : ${weatherObj.main.humidity}%`);
     $("#currentConditionsPane").append(humidity);
 
     var windSpeed = $("<div>");
@@ -192,7 +196,7 @@ function postCurrentConditions (weatherObj) {
     $("#currentConditionsPane").append(windSpeed);
 
     var uvIndex = $("<div>");
-    $(uvIndex).text("uvIndex : ");
+    $(uvIndex).text("uvIndex : " + uvObj.current.uvi);
     $("#currentConditionsPane").append(uvIndex);
 
 
@@ -200,18 +204,19 @@ function postCurrentConditions (weatherObj) {
 
 function postFutureConditions (weatherObj){
     for (let index = 5; index < 38; index+=8) {
-    
+        var date = new dayjs().add(Math.floor(index/8), 'day').format('ddd');
+
         var cardDiv = $("<div>");
         $(cardDiv).attr("id", `future${index}`);
         $(cardDiv).attr("class","futureCard");
         $("#futureConditionsPane").append(cardDiv);
 
         var dateDiv = $("<div>");
-        $(dateDiv).text(currentDate);
+        $(dateDiv).text(date);
         $(`#future${index}`).append(dateDiv);
 
-        var iconDiv = $("<div>");
-        $(iconDiv).text(weatherObj.list[index].weather[0].icon);
+        var iconDiv = $("<img>");
+        $(iconDiv).attr("src", `http://openweathermap.org/img/w/${weatherObj.list[index].weather[0].icon}.png`);
         $(`#future${index}`).append(iconDiv);
 
         var tempDiv = $("<div>");
