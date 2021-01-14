@@ -73,6 +73,7 @@ when user click on a recent city
     );
 
 var APIKey = "40a8eac704499a683458b2a328507962"
+var currentDate = dayjs ().format('HH');;
 
 function pullRecentCities() {
     return JSON.parse(localStorage.getItem("weatherRecentCitiesArr"));
@@ -151,7 +152,16 @@ function getCityInfo () {
 }
 
 function postCurrentConditions (weatherObj) {
-    var cityName = $("<div>");
+    $("#currentConditionsPane").empty();
+
+    var cityName = $("<span>");
     $(cityName).text(weatherObj.name);
     $("#currentConditionsPane").append(cityName);
+
+    var date = $("<span>");
+    $(date).text(currentDate);
+    $("#currentConditionsPane").append(date);
+
+
+
 }
