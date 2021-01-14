@@ -68,7 +68,7 @@ when user click on a recent city
     );
     $("#conditionsPane").append(
         $("<section>")
-            .attr ("id", "futureConditions")
+            .attr ("id", "futureConditionsPane")
             .text ("future conditions pane")
     );
 
@@ -138,7 +138,7 @@ function getCityInfo () {
         method: "GET"
       }).then(function(futureConditions) {
         console.log(futureConditions);
-        // postFutureConditions(furtureConditions);
+        postFutureConditions(futureConditions);
       });
 
       $.ajax({
@@ -162,9 +162,38 @@ function postCurrentConditions (weatherObj) {
     $(date).text(currentDate);
     $("#currentConditionsPane").append(date);
 
-    // var icon = $("<span>");
-    // $(icon).text(weatherObj.weather[0].icon);
-    // $("#currentConditionsPane").append(icon);
+    var icon = $("<span>");
+    $(icon).text(weatherObj.weather[0].icon);
+    $("#currentConditionsPane").append(icon);
 
+    var humidity = $("<div>");
+    $(humidity).text("Humidity : " +weatherObj.main.humidity);
+    $("#currentConditionsPane").append(humidity);
+
+    var windSpeed = $("<div>");
+    $(windSpeed).text("Windspeed : " +weatherObj.wind.speed);
+    $("#currentConditionsPane").append(windSpeed);
+
+    var uvIndex = $("<div>");
+    $(uvIndex).text("uvIndex : ");
+    $("#currentConditionsPane").append(uvIndex);
+
+
+}
+
+function postFutureConditions (weatherObj){
+    for (let index = 5; index < 38; index+=8) {
+    
+        var cardDiv = $("<div>");
+        $(cardDiv).attr("id", `future${index}`);
+        $(cardDiv).attr("class","futureCard");
+        $(cardDiv).text("test");
+        $("#futureConditionsPane").append(cardDiv);
+    
+        // var iconDiv = $("<div>");
+        // $(iconDiv).text(weatherObj.list.index.weather[0].icon);
+        // $(`#future${index}`).append(iconDiv);
+        
+    }
 
 }
