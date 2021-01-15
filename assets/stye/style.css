@@ -1,6 +1,6 @@
 body {
-    background-color: steelblue;
-    color: white;
+    background-color: white;
+    color: black;
     font-family: 'Texturina', serif;
 }
 span {
@@ -11,8 +11,7 @@ span {
     padding: 0;
 }
 #header {
-    background-color: indigo;
-    color: white;
+    background-color: white;
     text-align: center;
     font-size: 3em;
 }

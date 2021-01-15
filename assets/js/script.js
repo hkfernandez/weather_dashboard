@@ -74,11 +74,11 @@ when user click on a recent city
     );
 
 var APIKey = "40a8eac704499a683458b2a328507962";
+var searchType = "button"
+var queryStatus = "success"
 
 function pullRecentCities() {
     return JSON.parse(localStorage.getItem("weatherRecentCitiesArr"));
-    console.log("recent cities in pull function = " +JSON.parse(localStorage.getItem("weatherRecentCitiesArr")));
-
 }
 
 function pushRecentCities (arr) {
@@ -87,25 +87,31 @@ function pushRecentCities (arr) {
 
 
 function addCityToRecentCitites (userInputCity) {
-    var recentCitiesArr = pullRecentCities();
-    // console.log("cities array in addToRecentCitiesFunction = " +recentCitiesArr);
-    if (recentCitiesArr == null) {
-        var recentCitiesArr = [];
-    }
-    if (recentCitiesArr.includes(userInputCity) == false) {
-        if (recentCitiesArr.length < 8) {
-            recentCitiesArr.unshift(userInputCity);
-        } else {
-            recentCitiesArr.splice(recentCities.length-1,1,userInputCity)
+    if (queryStatus==="success"){
+        var recentCitiesArr = pullRecentCities();
+        if (recentCitiesArr == null) {
+            var recentCitiesArr = [];
+        }
+        if (recentCitiesArr.includes(userInputCity) == false) {
+            if (recentCitiesArr.length < 8) {
+                recentCitiesArr.unshift(userInputCity);
+            } else {
+                recentCitiesArr.pop();
+                recentCitiesArr.unshift(userInputCity);
+            }
         }
     }
     pushRecentCities (recentCitiesArr);
     appendRecentCities ();
 }
 
+
 function appendRecentCities () {
     $("#recentCitiesPane").empty();
     var recentCitiesArr = pullRecentCities();
+    if (recentCitiesArr ===null){
+        return;
+    }
     for (let index = 0; index < recentCitiesArr.length; index++) {
         const city = $("<button>")
         $(city).val(recentCitiesArr[index]);
@@ -113,59 +119,80 @@ function appendRecentCities () {
         $(city).attr("class", "recentBtn");
         $("#recentCitiesPane").append(city);
     }
+    $(".recentBtn").on("click", function (event){
+        event.preventDefault();
+        searchType = "button"
+        var recentCity = $(this).val();
+        getCityInfo(recentCity);
+    });
 }
 
 appendRecentCities ();
 
-
-
 // on click search - calls getCityInfo() which calls addCityToCurrentCities()
 // oneCall ajax call inside first call as it needs variables from the first call
-$("#searchBtn").on("click", getCityInfo);
+$("#searchBtn").on("click", function (event){
+    event.preventDefault();
+    queryStatus = "success"
+    if ($.trim($("#searchBar").val())) {
+    searchType = "searchBar";
+    getCityInfo ();
+    }
+});
 
-function getCityInfo () {
-    var userInput = $("#searchBar").val();
+function getCityInfo (recentCity) {
+
+    if (searchType === "searchBar"){
+        var userInput = $("#searchBar").val().trim();
+    } else {
+        var userInput = recentCity;
+    }
+
     var addressFutureConditions = `http://api.openweathermap.org/data/2.5/forecast?q=${userInput}&appid=40a8eac704499a683458b2a328507962`;
     var addressCurrentConditions = `http://api.openweathermap.org/data/2.5/weather?q=${userInput}&appid=40a8eac704499a683458b2a328507962`
 
     $("#searchBar").val("");
 
-    addCityToRecentCitites(userInput);
+    
 
       $.ajax({
         url: addressCurrentConditions,
-        method: "GET"
+        method: "GET",
       }).then(function(currentConditions) {
         console.log(currentConditions);
         UVcall(currentConditions);
-        
         function UVcall (weatherObj) {
             var lat = weatherObj.coord.lat
             var lon = weatherObj.coord.lon
             var addressOneCallWeather = `http://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude={part}&appid=40a8eac704499a683458b2a328507962`
-            console.log("coordinates = " + lon + lat);
             
             $.ajax({
                 url: addressOneCallWeather,
                 method: "GET"
             }).then(function(oneCallConditions) {
                 console.log(oneCallConditions);
-                postCurrentConditions(currentConditions, oneCallConditions);
+                if(queryStatus = "success"){
+                    addCityToRecentCitites(userInput);
+                    postCurrentConditions(currentConditions, oneCallConditions); 
+                } 
             });
         }  
       });
 
     $.ajax({
         url: addressFutureConditions,
-        method: "GET"
+        method: "GET",
+        error: function (){queryStatus = "failed"}
       }).then(function(futureConditions) {
         console.log(futureConditions);
-        postFutureConditions(futureConditions);
+        if (queryStatus="success"){
+            $("#futureConditionsPane").empty();
+            postFutureConditions(futureConditions);
+        }
       });
-
-      
-    
 }
+
+
 
 function postCurrentConditions (weatherObj, uvObj) {
     $("#currentConditionsPane").empty();
@@ -197,9 +224,14 @@ function postCurrentConditions (weatherObj, uvObj) {
 
     var uvIndex = $("<div>");
     $(uvIndex).text("uvIndex : " + uvObj.current.uvi);
+    if (uvIndex < 2) {
+        $(uvIndex).attr("class", "uvIndexLow");
+    } else if (uvIndex < 7) {
+        $(uvIndex).attr("class", "uvIndexMed");
+    } else {
+        $(uvIndex).attr("class", "uvIndexHigh");
+    }
     $("#currentConditionsPane").append(uvIndex);
-
-
 }
 
 function postFutureConditions (weatherObj){
@@ -226,8 +258,7 @@ function postFutureConditions (weatherObj){
         var humidityDiv = $("<div>");
         $(humidityDiv).text(`Humidity : ${weatherObj.list[index].main.humidity}%`);
         $(`#future${index}`).append(humidityDiv);
-    
-        
     }
 
 }
+
