@@ -92,3 +92,12 @@ main {
     font-weight: bold;
     font-size: 1.5em;
 }
+.uvIndexLow{
+    color: royalblue;
+}
+.uvIndexMed{
+    color: rgb(201, 225, 65);
+}
+.uvIndexHigh{
+    color: orange;
+}
