@@ -156,8 +156,8 @@ function getCityInfo (recentCity) {
         var userInput = recentCity;
     }
 
-    var addressFutureConditions = `http://api.openweathermap.org/data/2.5/forecast?q=${userInput}&appid=40a8eac704499a683458b2a328507962`;
-    var addressCurrentConditions = `http://api.openweathermap.org/data/2.5/weather?q=${userInput}&appid=40a8eac704499a683458b2a328507962`
+    var addressFutureConditions = `https://api.openweathermap.org/data/2.5/forecast?q=${userInput}&appid=40a8eac704499a683458b2a328507962`;
+    var addressCurrentConditions = `https://api.openweathermap.org/data/2.5/weather?q=${userInput}&appid=40a8eac704499a683458b2a328507962`
 
     $("#searchBar").val("");
 
@@ -172,7 +172,7 @@ function getCityInfo (recentCity) {
         function UVcall (weatherObj) {
             var lat = weatherObj.coord.lat
             var lon = weatherObj.coord.lon
-            var addressOneCallWeather = `http://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude={part}&appid=40a8eac704499a683458b2a328507962`
+            var addressOneCallWeather = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude={part}&appid=40a8eac704499a683458b2a328507962`
             
             $.ajax({
                 url: addressOneCallWeather,
