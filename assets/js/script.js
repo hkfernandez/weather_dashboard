@@ -79,6 +79,9 @@ var queryStatus = "success"
 
 function loadLatestCity(){
     var recentCitiesArr = pullRecentCities();
+    if (recentCitiesArr === null) {
+        return;
+    }
     var latestCity = recentCitiesArr[0];
     getCityInfo (latestCity);
 }
