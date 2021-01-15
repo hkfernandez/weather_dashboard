@@ -25,13 +25,18 @@ when user click on a recent city
     $("#mainContainer").append(
         $("<header>")
             .attr("id","header")
-            .text("header")
+            .text("Weather Dashboard")
     );
-    // aside w/ search bar and list of recent cities
     $("#mainContainer").append(
+        $("<div>")
+            .attr("id","secondContainer")
+    );
+
+
+    // aside w/ search bar and list of recent cities
+    $("#secondContainer").append(
         $("<aside>")
             .attr("id", "citySelectionPane")
-            .text("city selection pane")
             .append(
                 $("<div>")
                     .text("Search for a City:")
@@ -53,23 +58,19 @@ when user click on a recent city
     $("#citySelectionPane").append(
         $("<div>")
             .attr ("id", "recentCitiesPane")
-            .text ("recent cities")
     )
     // main content w/ current conditions and future conditions
-    $("#mainContainer").append(
+    $("#secondContainer").append(
         $("<main>")
             .attr ("id", "conditionsPane")
-            .text ("conditions pane")
             .append (
                 $("<section>")
                     .attr ("id", "currentConditionsPane")
-                    .text("current conditions pane")
             )
     );
     $("#conditionsPane").append(
         $("<section>")
             .attr ("id", "futureConditionsPane")
-            .text ("future conditions pane")
     );
 
 var APIKey = "40a8eac704499a683458b2a328507962";
@@ -149,7 +150,6 @@ function getCityInfo () {
                 method: "GET"
             }).then(function(oneCallConditions) {
                 console.log(oneCallConditions);
-                // postUV(oneCallConditions);
                 postCurrentConditions(currentConditions, oneCallConditions);
             });
         }  
@@ -204,7 +204,7 @@ function postCurrentConditions (weatherObj, uvObj) {
 
 function postFutureConditions (weatherObj){
     for (let index = 5; index < 38; index+=8) {
-        var date = new dayjs().add(Math.floor(index/8), 'day').format('ddd');
+        var date = new dayjs().add(Math.floor(index/8)+1, 'day').format('ddd');
 
         var cardDiv = $("<div>");
         $(cardDiv).attr("id", `future${index}`);

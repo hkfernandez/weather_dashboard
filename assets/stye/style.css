@@ -1,6 +1,28 @@
 body {
     background-color: steelblue;
     color: white;
+    font-family: 'Texturina', serif;
+}
+span {
+    padding: 0.5em;
+}
+#mainContainer {
+    margin: 0;
+    padding: 0;
+}
+#header {
+    background-color: indigo;
+    color: white;
+    text-align: center;
+    font-size: 3em;
+}
+#secondContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin: 0;
+    padding: 0;
+    border: 2px solid white ;
 }
 
 aside {
@@ -8,12 +30,9 @@ aside {
     float: left;
     width: 300px;
 }
-div {
-    border: 2px solid black;
-}
 main {
     border: 2px solid red;
-    width: 100%;
+    flex-grow: inherit;
 }
 button {
     display: block;
@@ -22,8 +41,12 @@ button {
 #futureConditionsPane {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    border: 2px solid blue;
+    justify-content: center;
+    align-items: center;
+    align-content: space-around;
 }
-)
 
 .futureCard {
     display: inline;
