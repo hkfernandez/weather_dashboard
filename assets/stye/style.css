@@ -1,54 +1,94 @@
 body {
     background-color: white;
     color: black;
-    font-family: 'Texturina', serif;
+    font-family: 'Open Sans', sans-serif;;
 }
 span {
     padding: 0.5em;
 }
+div {
+    margin: auto;
+    text-align: center;
+}
+button {
+    background-color: white;
+    border: none;
+    color: sienna;
+    padding: 1em;
+}
+#searchBtn {
+    color: orange;
+    border: 1px solid orange;
+    padding: .5em;
+}
+input {
+    text-align: center;
+    padding: .5em;
+}
 #mainContainer {
     margin: 0;
     padding: 0;
+    display: block;
+    width: 100%;
 }
 #header {
     background-color: white;
     text-align: center;
     font-size: 3em;
+    display: block;
 }
 #secondContainer {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
+    display: block;
+    width: 100%;
     margin: 0;
     padding: 0;
     border: 2px solid white ;
 }
 
 aside {
-    border: 2px solid green;
     float: left;
-    width: 300px;
+    width: 100%;
+    display:block;
+    margin: auto;
 }
 main {
-    border: 2px solid red;
     flex-grow: inherit;
 }
-button {
-    display: block;
+#currentConditionsPane {
+    align-items: center;
+    align-content: space-around;
+    font-size: 1em;
+    padding: 1em;
 }
 
 #futureConditionsPane {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    border: 2px solid blue;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     align-content: space-around;
 }
 
 .futureCard {
     display: inline;
-    background-color: white;
-    color: black;
+    border: 1px solid black;
+    display:flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    text-align: center;
+    width: 90px;
+    height: 170px;
+    padding: 1em;
+    font-size: 1em;
+}
+
+.currentCityName{
+    font-size: 2em;
+    font-weight: bold;
+
+}
+.futureDate{
+    font-weight: bold;
+    font-size: 1.5em;
 }

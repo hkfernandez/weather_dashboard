@@ -26,7 +26,15 @@ when user click on a recent city
         $("<header>")
             .attr("id","header")
             .text("Weather Dashboard")
-    );
+            );
+            $("#mainContainer").append(
+                $("<aside>")
+                    .attr("id", "citySelectionPane")
+                    .append(
+                        $("<div>")
+                            .text("Search for a City:")
+                    )
+            );
     $("#mainContainer").append(
         $("<div>")
             .attr("id","secondContainer")
@@ -34,14 +42,6 @@ when user click on a recent city
 
 
     // aside w/ search bar and list of recent cities
-    $("#secondContainer").append(
-        $("<aside>")
-            .attr("id", "citySelectionPane")
-            .append(
-                $("<div>")
-                    .text("Search for a City:")
-            )
-    );
     $("#citySelectionPane").append(
         $("<input>")
             .attr ("id", "searchBar")
@@ -77,6 +77,13 @@ var APIKey = "40a8eac704499a683458b2a328507962";
 var searchType = "button"
 var queryStatus = "success"
 
+function loadLatestCity(){
+    var recentCitiesArr = pullRecentCities();
+    var latestCity = recentCitiesArr[0];
+    getCityInfo (latestCity);
+}
+loadLatestCity();
+
 function pullRecentCities() {
     return JSON.parse(localStorage.getItem("weatherRecentCitiesArr"));
 }
@@ -84,7 +91,6 @@ function pullRecentCities() {
 function pushRecentCities (arr) {
     localStorage.setItem ("weatherRecentCitiesArr", JSON.stringify(arr));
 }
-
 
 function addCityToRecentCitites (userInputCity) {
     if (queryStatus==="success"){
@@ -104,7 +110,6 @@ function addCityToRecentCitites (userInputCity) {
     pushRecentCities (recentCitiesArr);
     appendRecentCities ();
 }
-
 
 function appendRecentCities () {
     $("#recentCitiesPane").empty();
@@ -192,23 +197,22 @@ function getCityInfo (recentCity) {
       });
 }
 
-
-
 function postCurrentConditions (weatherObj, uvObj) {
     $("#currentConditionsPane").empty();
     var currentDate = dayjs ().format('dddd MMM DD');
 
-    var cityName = $("<span>");
-    $(cityName).text(weatherObj.name);
-    $("#currentConditionsPane").append(cityName);
-
-    var date = $("<span>");
-    $(date).text(currentDate);
-    $("#currentConditionsPane").append(date);
-
     var icon = $("<img>");
     $(icon).attr("src", `http://openweathermap.org/img/w/${weatherObj.weather[0].icon}.png`);
     $("#currentConditionsPane").append(icon);
+
+    var cityName = $("<div>");
+    $(cityName).text(weatherObj.name);
+    $(cityName).attr("class", "currentCityName");
+    $("#currentConditionsPane").append(cityName);
+
+    var date = $("<div>");
+    $(date).text(currentDate);
+    $("#currentConditionsPane").append(date);
 
     var tempDiv = $("<div>");
     $(tempDiv).text(`Temp : ${Math.floor((weatherObj.main.temp-273.15)*9/5+32)} F`);
@@ -245,6 +249,7 @@ function postFutureConditions (weatherObj){
 
         var dateDiv = $("<div>");
         $(dateDiv).text(date);
+        $(dateDiv).attr("class", "futureDate");
         $(`#future${index}`).append(dateDiv);
 
         var iconDiv = $("<img>");
